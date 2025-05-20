@@ -1,0 +1,12 @@
+{
+    "id": "{776F99C5-538C-F397-7418-4DB6D1947248}",
+    "name": "WiZ",
+    "author": "Ulrich Bittner",
+    "url": "https://www.wizconnected.com/de-de",
+    "compatibility": {
+        "version": "8.0"
+    },
+    "version": "1.0",
+    "build": 1,
+    "date": 1747504587
+}

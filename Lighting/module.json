@@ -1,0 +1,14 @@
+{
+    "id": "{C764FBFD-2A5A-32BF-1987-CF28B5C82047}",
+    "name": "WiZLighting",
+    "type": 3,
+    "vendor": "WiZ",
+    "aliases": [
+        "WiZ Lighting"
+    ],
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "WIZ",
+    "url": "https://www.wizconnected.com/de-de"
+}
