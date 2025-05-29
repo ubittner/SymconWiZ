@@ -1,0 +1,14 @@
+{
+    "id": "{0EB2378B-D8D8-90F5-3126-D803DAF3A1C8}",
+    "name": "WiZDiscovery",
+    "type": 5,
+    "vendor": "WiZ",
+    "aliases": [
+        "WiZ Discovery"
+    ],
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "WIZ",
+    "url": "https://www.wizconnected.com/de-de"
+}

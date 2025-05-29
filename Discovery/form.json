@@ -1,0 +1,57 @@
+{
+    "elements": [
+        {
+            "type": "Image",
+            "image": "data:image/png;base64,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"
+        }
+    ],
+    "actions": [
+        {
+            "type": "Configurator",
+            "name": "Configurator",
+            "delete": true,
+            "sort": {
+                "column": "IPAddress",
+                "direction": "ascending"
+            },
+            "columns": [
+                {
+                    "name": "IPAddress",
+                    "caption": "IP address",
+                    "width": "auto"
+                },
+                {
+                    "name": "MACAddress",
+                    "caption": "MAC address",
+                    "width": "200px"
+                },
+                {
+                    "name": "HomeID",
+                    "caption": "Home ID",
+                    "width": "200px"
+                },
+                {
+                    "name": "RoomID",
+                    "caption": "Room ID",
+                    "width": "200px"
+                },
+                {
+                    "name": "GroupID",
+                    "caption": "Group ID",
+                    "width": "200px"
+                },
+                {
+                    "name": "Model",
+                    "caption": "Model",
+                    "width": "150px"
+                },
+                {
+                    "name": "Firmware",
+                    "caption": "Firmware",
+                    "width": "150px"
+                }
+            ],
+            "values": []
+        }
+    ]
+}

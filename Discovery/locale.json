@@ -1,0 +1,14 @@
+{
+    "translations": {
+        "de": {
+            "WiZ Lighting": "WiZ Beleuchtung",
+            "IP address": "IP Adresse",
+            "MAC address": "MAC Adresse",
+            "Home ID": "Zuhause ID",
+            "Room ID": "Raum ID",
+            "Group ID": "Gruppen ID",
+            "Model": "Modell",
+            "No devices found! Please turn devices on and try again.": "Keine Geräte gefunden! Bitte schalten Sie die Geräte ein und versuchen Sie es erneut."
+        }
+    }
+}
