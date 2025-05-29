@@ -25,6 +25,7 @@ class WiZLighting extends IPSModule
 
         $this->RegisterPropertyBoolean('Active', true);
         $this->RegisterPropertyString('IPAddress', '');
+        $this->RegisterPropertyString('MACAddress', '');
         $this->RegisterPropertyInteger('Port', 38899);
         $this->RegisterPropertyInteger('StatusUpdate', 0);
         $this->RegisterPropertyString('InternalDesignation', '');

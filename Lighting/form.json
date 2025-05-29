@@ -15,6 +15,11 @@
             "caption": "IP address"
         },
         {
+            "type": "ValidationTextBox",
+            "name": "MACAddress",
+            "caption": "MAC address (optional)"
+        },
+        {
             "type": "NumberSpinner",
             "name": "Port",
             "caption": "Port"
