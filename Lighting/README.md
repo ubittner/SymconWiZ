@@ -1,6 +1,6 @@
 [![Image](../imgs/logo.png)](https://www.wizconnected.com/de-de)
 
-Integriert WiZ Beleuchtung in die Symcon Softwarelösung für Haus- und Gebäudeautomation.  
+Schaltet eine einzelne WiZ Beleuchtung.
 
 Zur Verwendung dieses Moduls als Privatperson, Einrichter oder Integrator wenden Sie sich bitte zunächst an den Autor.
 
