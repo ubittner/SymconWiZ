@@ -286,6 +286,10 @@ trait Control
             return;
         }
         foreach (json_decode($responses, true) as $response) {
+            if (!$this->IsStringJsonEncoded($response)) {
+                $this->SendDebug(__FUNCTION__, $this->Translate('Abort, invalid response!'), 0);
+                continue;
+            }
             $status = json_decode($response, true);
             if (isset($status['result'])) {
                 //State
