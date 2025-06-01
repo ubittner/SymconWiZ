@@ -26,6 +26,11 @@
                     "width": "200px"
                 },
                 {
+                    "name": "Port",
+                    "caption": "Port",
+                    "width": "100px"
+                },
+                {
                     "name": "HomeID",
                     "caption": "Home ID",
                     "width": "200px"

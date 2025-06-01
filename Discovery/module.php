@@ -1,5 +1,9 @@
 <?php
 
+/** @noinspection DuplicatedCode */
+/** @noinspection PhpRedundantMethodOverrideInspection */
+/** @noinspection PhpUnused */
+
 declare(strict_types=1);
 
 class WiZDiscovery extends IPSModule
@@ -45,7 +49,7 @@ class WiZDiscovery extends IPSModule
                 'popup' => [
                     'items' => [[
                         'type'    => 'Label',
-                        'caption' => 'No devices found! Please turn devices on and try again.'
+                        'caption' => 'No devices found! Please try again.'
                     ]]
                 ]
             ];
@@ -56,6 +60,7 @@ class WiZDiscovery extends IPSModule
                 $addValue = [
                     'IPAddress'  => $device['IPAddress'],
                     'MACAddress' => $device['MACAddress'],
+                    'Port'       => $device['Port'],
                     'HomeID'     => $device['HomeID'],
                     'RoomID'     => $device['RoomID'],
                     'GroupID'    => $device['GroupID'],
@@ -63,16 +68,24 @@ class WiZDiscovery extends IPSModule
                     'Firmware'   => $device['Firmware'],
                     'instanceID' => $instanceID
                 ];
+
+                $lighting = json_encode([
+                    'Use'                   => true,
+                    'IPAddress'             => (string) $device['IPAddress'],
+                    'MACAddress'            => (string) $device['MACAddress'],
+                    'Port'                  => (int) $device['Port'],
+                    'InternalDesignation'   => $device['Model'] . ' ' . $device['Firmware'],
+                    'HomeID'                => (string) $device['HomeID'],
+                    'RoomID'                => (string) $device['RoomID'],
+                    'GroupID'               => (string) $device['GroupID']
+                ]);
+
                 $addValue['create'] = [
                     [
                         'moduleID'      => self::WIZ_LIGHTING_GUID,
                         'name'          => $this->Translate('WiZ Lighting') . ' (' . $device['IPAddress'] . ')',
                         'configuration' => [
-                            'IPAddress'  => (string) $device['IPAddress'],
-                            'MACAddress' => (string) $device['MACAddress'],
-                            'HomeID'     => (string) $device['HomeID'],
-                            'RoomID'     => (string) $device['RoomID'],
-                            'GroupID'    => (string) $device['GroupID']
+                            'Lighting' => "[$lighting]"
                         ]
                     ]
                 ];
@@ -115,6 +128,7 @@ class WiZDiscovery extends IPSModule
                     $device = [
                         'IPAddress'     => $from,
                         'MACAddress'    => $data['result']['mac'] ?? 'N/A',
+                        'Port'          => $port,
                         'HomeID'        => $data['result']['homeId'] ?? 'N/A',
                         'RoomID'        => $data['result']['roomId'] ?? 'N/A',
                         'GroupID'       => $data['result']['groupId'] ?? 'N/A',
@@ -139,8 +153,11 @@ class WiZDiscovery extends IPSModule
     {
         $instances = IPS_GetInstanceListByModuleID(self::WIZ_LIGHTING_GUID);
         foreach ($instances as $instance) {
-            if (IPS_GetProperty($instance, 'IPAddress') == $IPAddress) {
-                return $instance;
+            $devices = json_decode(IPS_GetProperty($instance, 'Lighting'), true);
+            foreach ($devices as $device) {
+                if ($device['IPAddress'] == $IPAddress) {
+                    return $instance;
+                }
             }
         }
         return 0;
