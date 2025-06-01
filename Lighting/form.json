@@ -120,6 +120,11 @@
         },
         {
             "type": "CheckBox",
+            "name": "UsePower",
+            "caption": "Use power"
+        },
+        {
+            "type": "CheckBox",
             "name": "UseBrightness",
             "caption": "Use brightness"
         },

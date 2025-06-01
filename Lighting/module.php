@@ -26,6 +26,7 @@ class WiZLighting extends IPSModule
 
         $this->RegisterPropertyBoolean('Active', true);
         $this->RegisterPropertyString('Lighting', '[]');
+        $this->RegisterPropertyBoolean('UsePower', true);
         $this->RegisterPropertyBoolean('UseBrightness', true);
         $this->RegisterPropertyBoolean('UseTemperature', true);
         $this->RegisterPropertyBoolean('UseColor', true);
@@ -163,6 +164,7 @@ class WiZLighting extends IPSModule
             return;
         }
 
+        IPS_SetHidden($this->GetIDForIdent('Power'), !$this->ReadPropertyBoolean('UsePower'));
         IPS_SetHidden($this->GetIDForIdent('Brightness'), !$this->ReadPropertyBoolean('UseBrightness'));
         IPS_SetHidden($this->GetIDForIdent('Temperature'), !$this->ReadPropertyBoolean('UseTemperature'));
         IPS_SetHidden($this->GetIDForIdent('Color'), !$this->ReadPropertyBoolean('UseColor'));
