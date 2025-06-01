@@ -8,7 +8,7 @@
             "Room ID": "Raum ID",
             "Group ID": "Gruppen ID",
             "Model": "Modell",
-            "No devices found! Please turn devices on and try again.": "Keine Geräte gefunden! Bitte schalten Sie die Geräte ein und versuchen Sie es erneut."
+            "No devices found! Please try again.": "Keine Geräte gefunden! Bitte versuchen Sie es erneut."
         }
     }
 }
