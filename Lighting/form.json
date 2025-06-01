@@ -109,6 +109,16 @@
             ]
         },
         {
+            "type": "NumberSpinner",
+            "name": "StatusUpdateInterval",
+            "caption": "Status update",
+            "suffix": "seconds"
+        },
+        {
+            "type": "Label",
+            "caption": "\nVisualization"
+        },
+        {
             "type": "CheckBox",
             "name": "UseBrightness",
             "caption": "Use brightness"
@@ -132,16 +142,6 @@
             "type": "CheckBox",
             "name": "UseStatusUpdate",
             "caption": "Use status update"
-        },
-        {
-            "type": "Label",
-            "caption": " "
-        },
-        {
-            "type": "NumberSpinner",
-            "name": "StatusUpdateInterval",
-            "caption": "Status update",
-            "suffix": "seconds"
         }
     ],
     "actions": [

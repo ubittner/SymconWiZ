@@ -279,7 +279,7 @@ trait Control
          * {"method":"getPilot","env":"pro","result":{"mac":"a1b2c3d4e5f6","rssi":-52,"state":true,"sceneId":5,"speed":100,"dimming":100}}
          * {"method":"getPilot","env":"pro","result":{"mac":"a1b2c3d4e5f6","rssi":-54,"state":true,"sceneId":0,"temp":2200,"dimming":53}}
          */
-        $this->SetTimerInterval('StatusUpdate', $this->ReadPropertyInteger('StatusUpdate') * 1000);
+        $this->SetTimerInterval('StatusUpdate', $this->ReadPropertyInteger('StatusUpdateInterval') * 1000);
         $responses = $this->GetStatus();
         if (!$this->IsStringJsonEncoded($responses)) {
             $this->SendDebug(__FUNCTION__, $this->Translate('Abort, invalid response!'), 0);

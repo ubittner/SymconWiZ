@@ -26,12 +26,12 @@ class WiZLighting extends IPSModule
 
         $this->RegisterPropertyBoolean('Active', true);
         $this->RegisterPropertyString('Lighting', '[]');
-        $this->RegisterPropertyInteger('StatusUpdate', 300);
         $this->RegisterPropertyBoolean('UseBrightness', true);
         $this->RegisterPropertyBoolean('UseTemperature', true);
         $this->RegisterPropertyBoolean('UseColor', true);
         $this->RegisterPropertyBoolean('UseScene', true);
         $this->RegisterPropertyBoolean('UseStatusUpdate', true);
+        $this->RegisterPropertyInteger('StatusUpdateInterval', 300);
 
         ### Variables
 
@@ -170,7 +170,7 @@ class WiZLighting extends IPSModule
         IPS_SetHidden($this->GetIDForIdent('StatusUpdate'), !$this->ReadPropertyBoolean('UseStatusUpdate'));
 
         $this->CheckConfiguration();
-        $this->SetTimerInterval('StatusUpdate', $this->ReadPropertyInteger('StatusUpdate') * 1000);
+        $this->SetTimerInterval('StatusUpdate', $this->ReadPropertyInteger('StatusUpdateInterval') * 1000);
         $this->UpdateStatus();
     }
 
