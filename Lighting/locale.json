@@ -3,18 +3,22 @@
         "de": {
             "WiZ Lighting": "WiZ Beleuchtung",
             "Lighting active": "Beleuchtung aktiv",
-            "IP address": "IP-Adresse",
-            "MAC address (optional)": "MAC Adresse (optional)",
-            "Status update": "Statusaktualisierung",
-            "seconds": "Sekunden",
+            "Lighting": "Beleuchtung",
+            "Use": "Verwenden",
+            "IP address *": "IP-Adresse *",
+            "MAC address": "MAC Adresse",
             "Internal designation": "Interne Bezeichnung",
             "Home ID": "Zuhause ID",
             "Room ID": "Raum ID",
             "Group ID": "Gruppen ID",
+            "\n* mandatory": "\n* erforderlich",
             "Use brightness": "Benutze Helligkeit",
             "Use temperature": "Benutze Temperatur",
             "Use color": "Benutze Farbe",
             "Use scene": "Benutze Szene",
+            "Use status update": "Benutze Statusaktualisierung",
+            "Status update": "Statusaktualisierung",
+            "seconds": "Sekunden",
             "Developer area": "Entwicklerbereich",
             "Adopt system config": "Systemkonfiguration übernehmen",
             "Show system config": "Systemkonfiguration anzeigen",
@@ -27,6 +31,7 @@
             "Temperature": "Temperatur",
             "Color": "Farbe",
             "Scene": "Szene",
+            "Update": "Aktualisieren",
             "Please enter the IP address!": "Bitte geben Sie die IP-Adresse an!",
             "IP address is not valid!": "IP-Address ist ungültig!",
             "Command": "Befehl",
@@ -74,7 +79,9 @@
             "pulse": "Pulsierend",
             "steampunk": "Steampunk",
             "lightalarm": "Lichtalarm",
-            "snowysky": "Verschneiter Himmel"
+            "snowysky": "Verschneiter Himmel",
+            "unknown": "unbekannt",
+            "Response for %s was successful!": "Antwort von %s war erfolgreich"
         }
     }
 }

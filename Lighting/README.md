@@ -1,6 +1,6 @@
 [![Image](../imgs/logo.png)](https://www.wizconnected.com/de-de)
 
-Schaltet eine einzelne WiZ Beleuchtung.
+Schaltet eine einzelne WiZ WiZ Beleuchtung oder Beleuchtungsgruppe.
 
 Zur Verwendung dieses Moduls als Privatperson, Einrichter oder Integrator wenden Sie sich bitte zunächst an den Autor.
 

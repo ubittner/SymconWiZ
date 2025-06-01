@@ -12,7 +12,7 @@ trait Control
          * mac          MAC address of the device
          * moduleName	Internal module type
          * fwVersion	Firmware version of the bulb
-         * bulbType	    Type of light (e.g. SHDW = Tunable White + RGB)
+         * bulbType     Type of light (e.g. SHDW = Tunable White + RGB)
          * wifiFwVer	Wi-Fi module firmware
          * homeId	    Your account's home group (local)
          * roomId	    Assigned room in WiZ app
@@ -24,24 +24,70 @@ trait Control
         return $this->ExecuteCommand(json_encode($command));
     }
 
-    public function AdoptSystemConfig(): void
+    public function ShowSystemConfig(): void
     {
-        $config = $this->GetSystemConfig();
-        if (!$this->IsStringJsonEncoded($config)) {
+        $configs = $this->GetSystemConfig();
+        if (!$this->IsStringJsonEncoded($configs)) {
             $this->SendDebug(__FUNCTION__, $this->Translate('Abort, invalid response!'), 0);
         }
-        $config = json_decode($config, true);
-        //Home ID
-        if (isset($config['result']['homeId'])) {
-            IPS_SetProperty($this->InstanceID, 'HomeID', $config['result']['homeId']);
+        foreach (json_decode($configs, true) as $IPAddress => $config) {
+            $config = json_decode($config, true);
+            echo $IPAddress . ":\n";
+            print_r($config);
+            echo "\n";
         }
-        //Room ID
-        if (isset($config['result']['roomId'])) {
-            IPS_SetProperty($this->InstanceID, 'RoomID', $config['result']['roomId']);
+    }
+
+    public function AdoptSystemConfig(): void
+    {
+        $configs = $this->GetSystemConfig();
+        if (!$this->IsStringJsonEncoded($configs)) {
+            $this->SendDebug(__FUNCTION__, $this->Translate('Abort, invalid response!'), 0);
         }
-        //Group ID
-        if (isset($config['result']['groupId'])) {
-            IPS_SetProperty($this->InstanceID, 'GroupID', $config['result']['groupId']);
+        $lighting = json_decode($this->ReadPropertyString('Lighting'), true);
+        foreach (json_decode($configs, true) as $IPAddress => $config) {
+            $config = json_decode($config, true);
+            foreach ($lighting as $key => $light) {
+                $use = $light['Use'];
+                $ip = $light['IPAddress'];
+                $mac = $light['MACAddress'];
+                $port = $light['Port'];
+                $name = $light['InternalDesignation'];
+                $homeID = $light['HomeID'];
+                $roomID = $light['RoomID'];
+                $groupID = $light['GroupID'];
+                if ($light['IPAddress'] == $IPAddress) {
+                    if (isset($config['result']['mac'])) {
+                        $mac = $config['result']['mac'];
+                    }
+                    //Home ID
+                    if (isset($config['result']['homeId'])) {
+                        $homeID = $config['result']['homeId'];
+                    }
+                    //Room ID
+
+                    if (isset($config['result']['roomId'])) {
+                        $roomID = $config['result']['roomId'];
+                    }
+                    //Group ID
+                    if (isset($config['result']['groupId'])) {
+                        $groupID = $config['result']['groupId'];
+                    }
+                }
+                $lighting[$key] = [
+                    'Use'                 => $use,
+                    'IPAddress'           => $ip,
+                    'MACAddress'          => $mac,
+                    'Port'                => $port,
+                    'InternalDesignation' => $name,
+                    'HomeID'              => $homeID,
+                    'RoomID'              => $roomID,
+                    'GroupID'             => $groupID
+                ];
+            }
+        }
+        if (isset($lighting)) {
+            @IPS_SetProperty($this->InstanceID, 'Lighting', json_encode($lighting));
         }
         if (IPS_HasChanges($this->InstanceID)) {
             IPS_ApplyChanges($this->InstanceID);
@@ -185,7 +231,8 @@ trait Control
          * "31" : "pulse",
          * "32" : "steampunk",
          * "35" : "lightalarm"
-         * "36" : "snowy sky"
+         * "36" : "snowy sky",
+         * "205": "unknown"
          */
         $command = [
             'method' => 'setPilot',
@@ -233,101 +280,119 @@ trait Control
          * {"method":"getPilot","env":"pro","result":{"mac":"a1b2c3d4e5f6","rssi":-54,"state":true,"sceneId":0,"temp":2200,"dimming":53}}
          */
         $this->SetTimerInterval('StatusUpdate', $this->ReadPropertyInteger('StatusUpdate') * 1000);
-        $status = $this->GetStatus();
-        if (!$this->IsStringJsonEncoded($status)) {
+        $responses = $this->GetStatus();
+        if (!$this->IsStringJsonEncoded($responses)) {
             $this->SendDebug(__FUNCTION__, $this->Translate('Abort, invalid response!'), 0);
             return;
         }
-        $status = json_decode($status, true);
-        if (isset($status['result'])) {
-            //State
-            if (isset($status['result']['state'])) {
-                $this->SetValue('Power', $status['result']['state']);
-            }
-            //Brightness
-            if (isset($status['result']['dimming'])) {
-                $this->SetValue('Brightness', $status['result']['dimming']);
-            }
-            //Scene
-            if (isset($status['result']['sceneId'])) {
-                //{"method":"getPilot","env":"pro","result":{"mac":"d8a0117fe018","rssi":-55,"state":true,"sceneId":205,"dimming":69}}
-                //sceneId = 205 ?
-                $this->SetValue('Scene', $status['result']['sceneId']);
-            }
-            //Color
-            if (isset($status['result']['r']) && isset($status['result']['g']) && isset($status['result']['b'])) {
-                $color = ($status['result']['r'] << 16) | ($status['result']['g'] << 8) | $status['result']['b'];
-                $this->SetValue('Color', $color);
-            } else {
-                $this->SetValue('Color', 0);
-            }
-            //Temperature
-            if (isset($status['result']['temp'])) {
-                $this->SetValue('Temperature', $status['result']['temp']);
-            } else {
-                $this->SetValue('Temperature', 2200);
-            }
-            //Cold white
-            if (isset($status['result']['c'])) {
-                //Not used at the moment
-                $this->SendDebug(__FUNCTION__, $this->Translate('Cold white') . ': ' . $status['result']['c'], 0);
-            }
-            //Warm white
-            if (isset($status['result']['w'])) {
-                //Not used at the moment
-                $this->SendDebug(__FUNCTION__, $this->Translate('Warm white') . ': ' . $status['result']['w'], 0);
+        foreach (json_decode($responses, true) as $response) {
+            $status = json_decode($response, true);
+            if (isset($status['result'])) {
+                //State
+                if (isset($status['result']['state'])) {
+                    $this->SetValue('Power', $status['result']['state']);
+                }
+                //Brightness
+                if (isset($status['result']['dimming'])) {
+                    $this->SetValue('Brightness', $status['result']['dimming']);
+                }
+                //Scene
+                if (isset($status['result']['sceneId'])) {
+                    //{"method":"getPilot","env":"pro","result":{"mac":"d8a0117fe018","rssi":-55,"state":true,"sceneId":205,"dimming":69}}
+                    //sceneId = 205 ?
+                    $this->SetValue('Scene', $status['result']['sceneId']);
+                }
+                //Color
+                if (isset($status['result']['r']) && isset($status['result']['g']) && isset($status['result']['b'])) {
+                    $color = ($status['result']['r'] << 16) | ($status['result']['g'] << 8) | $status['result']['b'];
+                    $this->SetValue('Color', $color);
+                } else {
+                    $this->SetValue('Color', 0);
+                }
+                //Temperature
+                if (isset($status['result']['temp'])) {
+                    $this->SetValue('Temperature', $status['result']['temp']);
+                } else {
+                    $this->SetValue('Temperature', 2200);
+                }
+                //Cold white
+                if (isset($status['result']['c'])) {
+                    //Not used at the moment
+                    $this->SendDebug(__FUNCTION__, $this->Translate('Cold white') . ': ' . $status['result']['c'], 0);
+                }
+                //Warm white
+                if (isset($status['result']['w'])) {
+                    //Not used at the moment
+                    $this->SendDebug(__FUNCTION__, $this->Translate('Warm white') . ': ' . $status['result']['w'], 0);
+                }
             }
         }
     }
 
     public function ExecuteCommand(string $Command): string
     {
-        $result = '';
         if (!$this->ReadPropertyBoolean('Active')) {
-            return $result;
+            return '[]';
         }
-        if (!$this->IsIpValid($this->ReadPropertyString('IPAddress'))) {
-            $this->SendDebug(__FUNCTION__, $this->Translate('Abort, invalid IP-Address!'), 0);
-            return $result;
-        }
-        $this->SendDebug(__FUNCTION__, $this->Translate('Command') . ': ' . $Command, 0);
-        if (!$this->IsStringJsonEncoded($Command)) {
-            $this->SendDebug(__FUNCTION__, $this->Translate('Abort, invalid command!'), 0);
-            return $result;
-        }
-        //Enter semaphore first
-        if (!$this->LockSemaphore('ExecuteCommand')) {
-            $this->SendDebug(__FUNCTION__, $this->Translate('Abort, Semaphore reached!'), 0);
+        $result = [];
+        $lighting = json_decode($this->ReadPropertyString('Lighting'), true);
+        foreach ($lighting as $light) {
+            if (!$light['Use']) {
+                continue;
+            }
+            if (!$this->IsIpValid($light['IPAddress'])) {
+                $this->SendDebug(__FUNCTION__, $this->Translate('Abort, invalid IP-Address!'), 0);
+                continue;
+            }
+            $this->SendDebug(__FUNCTION__, $this->Translate('Command') . ': ' . $Command, 0);
+            if (!$this->IsStringJsonEncoded($Command)) {
+                $this->SendDebug(__FUNCTION__, $this->Translate('Abort, invalid command!'), 0);
+                continue;
+            }
+            //Enter semaphore first
+            if (!$this->LockSemaphore('ExecuteCommand')) {
+                $this->SendDebug(__FUNCTION__, $this->Translate('Abort, Semaphore reached!'), 0);
+                $this->UnlockSemaphore('ExecuteCommand');
+                continue;
+            }
+            if (!Sys_Ping($light['IPAddress'], 1000)) {
+                $this->SendDebug(__FUNCTION__, $this->Translate('Abort, IP-Address') . ' ' . $light['IPAddress'] . ' ' . $this->Translate('not reachable!'), 0);
+                $this->UnlockSemaphore('ExecuteCommand');
+                continue;
+            }
+            $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+            if (!$socket) {
+                $this->SendDebug(__FUNCTION__, $this->Translate("Abort, couldn't create socket:" . ' ' . socket_strerror(socket_last_error())), 0);
+                $this->UnlockSemaphore('ExecuteCommand');
+                continue;
+            }
+            //Send the UDP packet
+            socket_sendto($socket, $Command, strlen($Command), 0, $light['IPAddress'], $light['Port']);
+            //Optional: Receive response (timeout may be needed)
+            socket_set_option($socket, SOL_SOCKET, SO_RCVTIMEO, ['sec' => 1, 'usec' => 0]);
+            if (@socket_recvfrom($socket, $data, 512, 0, $from, $port)) {
+                $this->SendDebug(__FUNCTION__, $from . ': ' . $port . ', ' . $this->Translate('Result') . ': ' . $data, 0);
+            }
+            $result[$light['IPAddress']] = $data;
+            socket_close($socket);
+            //Leave semaphore
             $this->UnlockSemaphore('ExecuteCommand');
-            return $result;
         }
-        $ip = $this->ReadPropertyString('IPAddress');
-        $port = $this->ReadPropertyInteger('Port');
-        if (!Sys_Ping($ip, 1000)) {
-            $this->SendDebug(__FUNCTION__, $this->Translate('Abort, IP-Address') . ' ' . $ip . ' ' . $this->Translate('not reachable!'), 0);
-            $this->UnlockSemaphore('ExecuteCommand');
-            return $result;
-        }
-        $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
-        if (!$socket) {
-            $this->SendDebug(__FUNCTION__, $this->Translate("Abort, couldn't create socket:" . ' ' . socket_strerror(socket_last_error())), 0);
-            $this->UnlockSemaphore('ExecuteCommand');
-            return $result;
-        }
-        //Send the UDP packet
-        socket_sendto($socket, $Command, strlen($Command), 0, $ip, $port);
-        //Optional: Receive response (timeout may be needed)
-        socket_set_option($socket, SOL_SOCKET, SO_RCVTIMEO, ['sec' => 1, 'usec' => 0]);
-        if (@socket_recvfrom($socket, $result, 512, 0, $from, $port)) {
-            $this->SendDebug(__FUNCTION__, $from . ': ' . $port . ', ' . $this->Translate('Result') . ': ' . $result, 0);
-        }
-        socket_close($socket);
-        //Leave semaphore
-        $this->UnlockSemaphore('ExecuteCommand');
-        return $result;
+        return json_encode($result);
     }
 
     ##### Protected
+
+    protected function IsIpValid(string $ip): bool
+    {
+        $this->SendDebug(__FUNCTION__, $this->Translate('IP-Address') . ': ' . $ip, 0);
+        $result = filter_var($ip, FILTER_VALIDATE_IP);
+        if (!$result) {
+            $this->SendDebug(__FUNCTION__, $this->Translate('Abort, invalid IP-Address!'), 0);
+            return false;
+        }
+        return true;
+    }
 
     protected function IsResponseSuccessful(string $Response): bool
     {
@@ -337,14 +402,16 @@ trait Control
             $this->SendDebug(__FUNCTION__, $this->Translate('Abort, invalid response!'), 0);
             return false;
         }
-        $response = json_decode($Response, true);
-        if (!isset($response['result']['success'])) {
-            $this->SendDebug(__FUNCTION__, $this->Translate("Response wasn't successful!"), 0);
-            return false;
-        } else {
-            $this->SendDebug(__FUNCTION__, $this->Translate('Response was successful!'), 0);
-            return $response['result']['success'];
+        $result = false;
+        foreach (json_decode($Response, true) as $IPAddress => $response) {
+            $response = json_decode($response, true);
+            if (isset($response['result']['success'])) {
+                $text = sprintf($this->Translate('Response for %s was successful!'), $IPAddress);
+                $this->SendDebug(__FUNCTION__, $text, 0);
+                $result = true;
+            }
         }
+        return $result;
     }
 
     protected function IsStringJsonEncoded(string $String): bool

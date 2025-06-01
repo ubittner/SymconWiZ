@@ -10,53 +10,103 @@
             "caption": "Lighting active"
         },
         {
-            "type": "ValidationTextBox",
-            "name": "IPAddress",
-            "caption": "IP address"
-        },
-        {
-            "type": "ValidationTextBox",
-            "name": "MACAddress",
-            "caption": "MAC address (optional)"
-        },
-        {
-            "type": "NumberSpinner",
-            "name": "Port",
-            "caption": "Port"
-        },
-        {
-            "type": "NumberSpinner",
-            "name": "StatusUpdateInterval",
-            "caption": "Status update",
-            "suffix": "seconds"
-        },
-        {
-            "type": "Label",
-            "caption": " "
-        },
-        {
-            "type": "ValidationTextBox",
-            "name": "InternalDesignation",
-            "caption": "Internal designation"
-        },
-        {
-            "type": "ValidationTextBox",
-            "name": "HomeID",
-            "caption": "Home ID"
-        },
-        {
-            "type": "ValidationTextBox",
-            "name": "RoomID",
-            "caption": "Room ID"
-        },
-        {
-            "type": "ValidationTextBox",
-            "name": "GroupID",
-            "caption": "Group ID"
-        },
-        {
-            "type": "Label",
-            "caption": " "
+            "type": "List",
+            "name": "Lighting",
+            "caption": "Lighting",
+            "rowCount": 5,
+            "add": true,
+            "delete": true,
+            "sort": {
+                "column": "IPAddress",
+                "direction": "ascending"
+            },
+            "columns": [
+                {
+                    "name": "Use",
+                    "caption": "Use",
+                    "width": "120px",
+                    "add": true,
+                    "edit": {
+                        "type": "CheckBox"
+                    }
+                },
+                {
+                    "name": "IPAddress",
+                    "caption": "IP address *",
+                    "width": "200px",
+                    "add": "",
+                    "edit": {
+                        "type": "ValidationTextBox"
+                    }
+                },
+                {
+                    "name": "MACAddress",
+                    "caption": "MAC address",
+                    "width": "210px",
+                    "add": "",
+                    "edit": {
+                        "type": "ValidationTextBox"
+                    }
+                },
+                {
+                    "name": "Port",
+                    "caption": "Port *",
+                    "width": "100px",
+                    "add": 38899,
+                    "edit": {
+                        "type": "NumberSpinner"
+                    }
+                },
+                {
+                    "name": "InternalDesignation",
+                    "caption": "Internal designation",
+                    "width": "300px",
+                    "add": "",
+                    "edit": {
+                        "type": "ValidationTextBox"
+                    }
+                },
+                {
+                    "name": "HomeID",
+                    "caption": "Home ID",
+                    "width": "300px",
+                    "add": "",
+                    "visible": false,
+                    "edit": {
+                        "type": "ValidationTextBox"
+                    }
+                },
+                {
+                    "name": "RoomID",
+                    "caption": "Room ID",
+                    "width": "300px",
+                    "add": "",
+                    "visible": false,
+                    "edit": {
+                        "type": "ValidationTextBox"
+                    }
+                },
+                {
+                    "name": "GroupID",
+                    "caption": "Group ID",
+                    "width": "200px",
+                    "add": "",
+                    "visible": false,
+                    "edit": {
+                        "type": "ValidationTextBox"
+                    }
+                },
+                {
+                    "name": "Hint",
+                    "caption": "\n* mandatory",
+                    "width": "200px",
+                    "visible": false,
+                    "add": "",
+                    "edit": {
+                        "type": "Label"
+                    }
+                }
+            ]
         },
         {
             "type": "CheckBox",
@@ -77,6 +127,21 @@
             "type": "CheckBox",
             "name": "UseScene",
             "caption": "Use scene"
+        },
+        {
+            "type": "CheckBox",
+            "name": "UseStatusUpdate",
+            "caption": "Use status update"
+        },
+        {
+            "type": "Label",
+            "caption": " "
+        },
+        {
+            "type": "NumberSpinner",
+            "name": "StatusUpdateInterval",
+            "caption": "Status update",
+            "suffix": "seconds"
         }
     ],
     "actions": [
@@ -99,7 +164,7 @@
                 {
                     "type": "Button",
                     "caption": "Show system config",
-                    "onClick": "print_r(json_decode(WIZ_GetSystemConfig($id), true));"
+                    "onClick": "WIZ_ShowSystemConfig($id);"
                 },
                 {
                     "type": "Button",
