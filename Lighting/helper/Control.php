@@ -418,8 +418,12 @@ trait Control
         return $result;
     }
 
-    protected function IsStringJsonEncoded(string $String): bool
+    protected function IsStringJsonEncoded(mixed $String): bool
     {
+        //We use mixed in case the string is not a string, e.g., null or an array
+        if (!is_string($String)) {
+            return false;
+        }
         json_decode($String);
         return json_last_error() === JSON_ERROR_NONE;
     }
