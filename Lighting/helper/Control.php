@@ -333,6 +333,29 @@ trait Control
         }
     }
 
+    public function SelectFavorite(int $FavoriteNumber): void
+    {
+        $this->SetValue('Favorites', $FavoriteNumber);
+        $favorites = json_decode($this->ReadPropertyString('Favorites'), true);
+        foreach ($favorites as $favorite) {
+            if ($favorite['FavoriteNumber'] == $FavoriteNumber) {
+                if ($favorite['UseScene']) {
+                    $this->SetScene($favorite['Scene']);
+                    break;
+                }
+                if ($favorite['UseColor']) {
+                    $this->SetColor($favorite['Color']);
+                }
+                if ($favorite['UseTemperature']) {
+                    $this->SetColorTemperature($favorite['Temperature']);
+                }
+                if ($favorite['UseBrightness']) {
+                    $this->SetBrightness($favorite['Brightness']);
+                }
+            }
+        }
+    }
+
     public function ExecuteCommand(string $Command): string
     {
         if (!$this->ReadPropertyBoolean('Active')) {
