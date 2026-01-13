@@ -236,32 +236,6 @@ class WiZLighting extends IPSModule
         }
     }
 
-    protected function CreateFavoriteProfile(): void
-    {
-        //Check for none
-        $favorites = json_decode($this->ReadPropertyString('Favorites'), true);
-        if (empty($favorites)) {
-            $this->SendDebug(__FUNCTION__, 'No favorites found!', 0);
-            return;
-        }
-
-        if (count($favorites) <= 0) {
-            $this->SendDebug(__FUNCTION__, 'No favorites found!', 0);
-            return;
-        }
-
-        $profile = self::MODULE_PREFIX . '.' . $this->InstanceID . '.Favorites';
-        //Delete profile first
-        if (IPS_VariableProfileExists($profile)) {
-            IPS_DeleteVariableProfile($profile);
-        }
-        //Create profiles again
-        IPS_CreateVariableProfile($profile, 1);
-        foreach ($favorites as $favorite) {
-            IPS_SetVariableProfileAssociation($profile, (int) $favorite['FavoriteNumber'], $favorite['Designation'], 'star', -1);
-        }
-    }
-
     ##### Private
 
     private function KernelReady(): void
@@ -289,6 +263,32 @@ class WiZLighting extends IPSModule
             $status = 104;
         }
         $this->SetStatus($status);
+    }
+
+    private function CreateFavoriteProfile(): void
+    {
+        //Check for none
+        $favorites = json_decode($this->ReadPropertyString('Favorites'), true);
+        if (empty($favorites)) {
+            $this->SendDebug(__FUNCTION__, 'No favorites found!', 0);
+            return;
+        }
+
+        if (count($favorites) <= 0) {
+            $this->SendDebug(__FUNCTION__, 'No favorites found!', 0);
+            return;
+        }
+
+        $profile = self::MODULE_PREFIX . '.' . $this->InstanceID . '.Favorites';
+        //Delete profile first
+        if (IPS_VariableProfileExists($profile)) {
+            IPS_DeleteVariableProfile($profile);
+        }
+        //Create profiles again
+        IPS_CreateVariableProfile($profile, 1);
+        foreach ($favorites as $favorite) {
+            IPS_SetVariableProfileAssociation($profile, (int) $favorite['FavoriteNumber'], $favorite['Designation'], 'star', -1);
+        }
     }
 
     private function DeleteProfile(string $ProfileName): void
