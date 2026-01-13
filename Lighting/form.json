@@ -424,6 +424,10 @@
             "caption": "Developer area",
             "items": [
                 {
+                    "type": "Label",
+                    "caption": "Version 1.0-5 (2026-01-13)"
+                },
+                {
                     "type": "Button",
                     "caption": "Adopt system config",
                     "onClick": "WIZ_AdoptSystemConfig($id);"
