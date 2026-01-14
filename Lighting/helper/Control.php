@@ -333,6 +333,35 @@ trait Control
         }
     }
 
+    public function SelectFavorite(int $FavoriteNumber): void
+    {
+        //Check if a favorite exists
+        $favorites = json_decode($this->ReadPropertyString('Favorites'), true);
+        $exists = in_array($FavoriteNumber, array_column($favorites, 'FavoriteNumber'), true);
+        if (!$exists) {
+            $this->SendDebug(__FUNCTION__, $this->Translate('Favorite') . ' ' . $FavoriteNumber . ' ' . $this->Translate('does not exist!'), 0);
+            return;
+        }
+        $this->SetValue('Favorites', $FavoriteNumber);
+        foreach ($favorites as $favorite) {
+            if ($favorite['FavoriteNumber'] == $FavoriteNumber) {
+                if ($favorite['UseScene']) {
+                    $this->SetScene($favorite['Scene']);
+                    break;
+                }
+                if ($favorite['UseColor']) {
+                    $this->SetColor($favorite['Color']);
+                }
+                if ($favorite['UseTemperature']) {
+                    $this->SetColorTemperature($favorite['Temperature']);
+                }
+                if ($favorite['UseBrightness']) {
+                    $this->SetBrightness($favorite['Brightness']);
+                }
+            }
+        }
+    }
+
     public function ExecuteCommand(string $Command): string
     {
         if (!$this->ReadPropertyBoolean('Active')) {

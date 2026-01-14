@@ -25,6 +25,7 @@ class WiZLighting extends IPSModule
         ### Properties
 
         $this->RegisterPropertyBoolean('Active', true);
+        $this->RegisterPropertyInteger('StatusUpdateInterval', 300);
         $this->RegisterPropertyString('Lighting', '[]');
         $this->RegisterPropertyBoolean('UsePower', true);
         $this->RegisterPropertyBoolean('UseBrightness', true);
@@ -32,7 +33,8 @@ class WiZLighting extends IPSModule
         $this->RegisterPropertyBoolean('UseColor', true);
         $this->RegisterPropertyBoolean('UseScene', true);
         $this->RegisterPropertyBoolean('UseStatusUpdate', true);
-        $this->RegisterPropertyInteger('StatusUpdateInterval', 300);
+        $this->RegisterPropertyBoolean('UseFavorites', true);
+        $this->RegisterPropertyString('Favorites', '[]');
 
         ### Variables
 
@@ -135,6 +137,15 @@ class WiZLighting extends IPSModule
         $this->RegisterVariableInteger('StatusUpdate', 'Status', $profile, 60);
         $this->EnableAction('StatusUpdate');
 
+        //Favorites
+        $profile = self::MODULE_PREFIX . '.' . $this->InstanceID . '.Favorites';
+        if (!IPS_VariableProfileExists($profile)) {
+            IPS_CreateVariableProfile($profile, 1);
+        }
+        IPS_SetVariableProfileAssociation($profile, 0, $this->Translate('None'), 'star', -1);
+        $this->RegisterVariableInteger('Favorites', $this->Translate('Favorites'), $profile, 70);
+        $this->EnableAction('Favorites');
+
         ### Timer
         $this->RegisterTimer('StatusUpdate', 0, self::MODULE_PREFIX . '_UpdateStatus(' . $this->InstanceID . ');');
     }
@@ -170,8 +181,10 @@ class WiZLighting extends IPSModule
         IPS_SetHidden($this->GetIDForIdent('Color'), !$this->ReadPropertyBoolean('UseColor'));
         IPS_SetHidden($this->GetIDForIdent('Scene'), !$this->ReadPropertyBoolean('UseScene'));
         IPS_SetHidden($this->GetIDForIdent('StatusUpdate'), !$this->ReadPropertyBoolean('UseStatusUpdate'));
+        IPS_SetHidden($this->GetIDForIdent('Favorites'), !$this->ReadPropertyBoolean('UseFavorites'));
 
         $this->CheckConfiguration();
+        $this->CreateFavoriteProfile();
         $this->SetTimerInterval('StatusUpdate', $this->ReadPropertyInteger('StatusUpdateInterval') * 1000);
         $this->UpdateStatus();
     }
@@ -216,6 +229,10 @@ class WiZLighting extends IPSModule
                 $this->UpdateStatus();
                 break;
 
+            case 'Favorites':
+                $this->SelectFavorite($Value);
+                break;
+
         }
     }
 
@@ -246,6 +263,32 @@ class WiZLighting extends IPSModule
             $status = 104;
         }
         $this->SetStatus($status);
+    }
+
+    private function CreateFavoriteProfile(): void
+    {
+        //Check for none
+        $favorites = json_decode($this->ReadPropertyString('Favorites'), true);
+        if (empty($favorites)) {
+            $this->SendDebug(__FUNCTION__, 'No favorites found!', 0);
+            return;
+        }
+
+        if (count($favorites) <= 0) {
+            $this->SendDebug(__FUNCTION__, 'No favorites found!', 0);
+            return;
+        }
+
+        $profile = self::MODULE_PREFIX . '.' . $this->InstanceID . '.Favorites';
+        //Delete profile first
+        if (IPS_VariableProfileExists($profile)) {
+            IPS_DeleteVariableProfile($profile);
+        }
+        //Create profiles again
+        IPS_CreateVariableProfile($profile, 1);
+        foreach ($favorites as $favorite) {
+            IPS_SetVariableProfileAssociation($profile, (int) $favorite['FavoriteNumber'], $favorite['Designation'], 'star', -1);
+        }
     }
 
     private function DeleteProfile(string $ProfileName): void

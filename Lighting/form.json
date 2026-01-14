@@ -147,6 +147,268 @@
             "type": "CheckBox",
             "name": "UseStatusUpdate",
             "caption": "Use status update"
+        },
+        {
+            "type": "CheckBox",
+            "name": "UseFavorites",
+            "caption": "Use favorites"
+        },
+        {
+            "type": "Label",
+            "caption": "\nFavorites"
+        },
+        {
+            "type": "List",
+            "name": "Favorites",
+            "rowCount": 5,
+            "add": true,
+            "delete": true,
+            "sort": {
+                "column": "FavoriteNumber",
+                "direction": "ascending"
+            },
+            "columns": [
+                {
+                    "name": "FavoriteNumber",
+                    "caption": "Favorite #",
+                    "width": "100px",
+                    "add": 0,
+                    "edit": {
+                        "type": "NumberSpinner"
+                    }
+                },
+                {
+                    "name": "Designation",
+                    "caption": "Designation",
+                    "width": "400px",
+                    "add": "",
+                    "edit": {
+                        "type": "ValidationTextBox"
+                    }
+                },
+                {
+                    "name": "UseBrightness",
+                    "caption": "Use brightness",
+                    "width": "150px",
+                    "visible": false,
+                    "add": false,
+                    "edit": {
+                        "type": "CheckBox"
+                    }
+                },
+                {
+                    "name": "Brightness",
+                    "caption": "Brightness",
+                    "width": "150px",
+                    "visible": false,
+                    "add": 0,
+                    "edit": {
+                        "type": "NumberSpinner"
+                    }
+                },
+                {
+                    "name": "UseTemperature",
+                    "caption": "Use temperature",
+                    "width": "150px",
+                    "visible": false,
+                    "add": false,
+                    "edit": {
+                        "type": "CheckBox"
+                    }
+                },
+                {
+                    "name": "Temperature",
+                    "caption": "Temperature",
+                    "width": "150px",
+                    "visible": false,
+                    "add": 2200,
+                    "edit": {
+                        "type": "NumberSpinner"
+                    }
+                },
+                {
+                    "name": "UseColor",
+                    "caption": "Use color",
+                    "width": "150px",
+                    "visible": false,
+                    "add": false,
+                    "edit": {
+                        "type": "CheckBox"
+                    }
+                },
+                {
+                    "name": "Color",
+                    "caption": "Color",
+                    "width": "150px",
+                    "visible": false,
+                    "add": 0,
+                    "edit": {
+                        "type": "SelectColor"
+                    }
+                },
+                {
+                    "name": "UseScene",
+                    "caption": "Use scene",
+                    "width": "150px",
+                    "visible": false,
+                    "add": false,
+                    "edit": {
+                        "type": "CheckBox"
+                    }
+                },
+                {
+                    "name": "Scene",
+                    "caption": "Scene",
+                    "width": "150px",
+                    "visible": false,
+                    "add": 0,
+                    "edit": {
+                        "type": "Select",
+                        "options": [
+                            {
+                                "caption": "none",
+                                "value": 0
+                            },
+                            {
+                                "caption": "ocean",
+                                "value": 1
+                            },
+                            {
+                                "caption": "romance",
+                                "value": 2
+                            },
+                            {
+                                "caption": "sunset",
+                                "value": 3
+                            },
+                            {
+                                "caption": "party",
+                                "value": 4
+                            },
+                            {
+                                "caption": "fireplace",
+                                "value": 5
+                            },
+                            {
+                                "caption": "cozy",
+                                "value": 6
+                            },
+                            {
+                                "caption": "forest",
+                                "value": 7
+                            },
+                            {
+                                "caption": "pastel",
+                                "value": 8
+                            },
+                            {
+                                "caption": "wake",
+                                "value": 9
+                            },
+                            {
+                                "caption": "bedtime",
+                                "value": 10
+                            },
+                            {
+                                "caption": "warm",
+                                "value": 11
+                            },
+                            {
+                                "caption": "daylight",
+                                "value": 12
+                            },
+                            {
+                                "caption": "cool",
+                                "value": 13
+                            },
+                            {
+                                "caption": "night",
+                                "value": 14
+                            },
+                            {
+                                "caption": "focus",
+                                "value": 15
+                            },
+                            {
+                                "caption": "relax",
+                                "value": 16
+                            },
+                            {
+                                "caption": "true",
+                                "value": 17
+                            },
+                            {
+                                "caption": "tv",
+                                "value": 18
+                            },
+                            {
+                                "caption": "plant",
+                                "value": 19
+                            },
+                            {
+                                "caption": "spring",
+                                "value": 20
+                            },
+                            {
+                                "caption": "summer",
+                                "value": 21
+                            },
+                            {
+                                "caption": "fall",
+                                "value": 22
+                            },
+                            {
+                                "caption": "deepdive",
+                                "value": 23
+                            },
+                            {
+                                "caption": "jungle",
+                                "value": 24
+                            },
+                            {
+                                "caption": "mojito",
+                                "value": 25
+                            },
+                            {
+                                "caption": "club",
+                                "value": 26
+                            },
+                            {
+                                "caption": "christmas",
+                                "value": 27
+                            },
+                            {
+                                "caption": "halloween",
+                                "value": 28
+                            },
+                            {
+                                "caption": "candlelight",
+                                "value": 29
+                            },
+                            {
+                                "caption": "golden",
+                                "value": 30
+                            },
+                            {
+                                "caption": "pulse",
+                                "value": 31
+                            },
+                            {
+                                "caption": "steampunk",
+                                "value": 32
+                            },
+                            {
+                                "caption": "lightalarm",
+                                "value": 35
+                            },
+                            {
+                                "caption": "snowysky",
+                                "value": 36
+                            }
+                        ]
+                    }
+                }
+            ]
         }
     ],
     "actions": [
@@ -161,6 +423,10 @@
             "type": "ExpansionPanel",
             "caption": "Developer area",
             "items": [
+                {
+                    "type": "Label",
+                    "caption": "Version 1.0-5 (2026-01-13)"
+                },
                 {
                     "type": "Button",
                     "caption": "Adopt system config",

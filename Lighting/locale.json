@@ -21,6 +21,8 @@
             "Use color": "Benutze Farbe",
             "Use scene": "Benutze Szene",
             "Use status update": "Benutze Status",
+            "Use favorites": "Benutze Favoriten",
+            "\nFavorites": "\nFavoriten",
             "Developer area": "Entwicklerbereich",
             "Adopt system config": "Systemkonfiguration übernehmen",
             "Show system config": "Systemkonfiguration anzeigen",
@@ -83,7 +85,11 @@
             "lightalarm": "Lichtalarm",
             "snowysky": "Verschneiter Himmel",
             "unknown": "unbekannt",
-            "Response for %s was successful!": "Antwort von %s war erfolgreich"
+            "Response for %s was successful!": "Antwort von %s war erfolgreich",
+            "None": "Keine",
+            "Favorites": "Favoriten",
+            "Favorite #": "Favorit #",
+            "Designation": "Bezeichnung"
         }
     }
 }
